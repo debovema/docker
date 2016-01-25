@@ -27,6 +27,17 @@ touch "${COPY_REFERENCE_FILE_LOG}" || (echo "Can not write to ${COPY_REFERENCE_F
 echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
 find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
 
+if [[ -e /root/.ssh/socket ]]; then # if an SSH socket exists
+    # list keys
+    ssh-add -l
+
+    # copy SSH content (keys) from volume /ssh to the /root/.ssh directory
+    # we can't mount a volume directly because it would overwrite the socket
+    if [[ -d /ssh ]]; then
+        cp -r /ssh/* /root/.ssh
+    fi
+fi
+
 # if `docker run` first argument start with `--` the user is passing jenkins launcher arguments
 if [[ $# -lt 1 ]] || [[ "$1" == "--"* ]]; then
   CMD=(java)
