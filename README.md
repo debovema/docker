@@ -25,3 +25,4 @@ Start Jenkins
 ```console
 docker run -d --name jenkins --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/root/.ssh/socket -v ~/.ssh:/ssh -p 8080:8080 debovema/jenkins-docker-with-ssh:latest
 ```
+
